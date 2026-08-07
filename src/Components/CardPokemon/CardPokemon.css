@@ -1,0 +1,55 @@
+.card-pokemon {
+  width: 100%;
+  border: none;
+  border-radius: 1.2rem;
+  overflow: hidden;
+  background: linear-gradient(145deg, #ffffff 0%, #f2fffb 100%);
+  box-shadow: 0 10px 25px rgba(20, 120, 115, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-pokemon:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(19, 92, 132, 0.18);
+}
+
+.card-pokemon .card-img-top {
+  padding: 1rem;
+  background: linear-gradient(135deg, #dffbf4 0%, #dcefff 100%);
+  object-fit: contain;
+  height: 220px;
+}
+
+.card-pokemon .card-body {
+  padding: 1.1rem 1.1rem 1.25rem;
+}
+
+.card-pokemon .card-title {
+  font-weight: 700;
+  color: #0f4c5c;
+  text-transform: capitalize;
+  margin-bottom: 0.6rem;
+}
+
+.card-pokemon .card-text {
+  color: #3a6f7a;
+  font-size: 0.95rem;
+  margin-bottom: 0.9rem;
+}
+
+.card-pokemon .btn-primary {
+  background: linear-gradient(135deg, #2ec4b6 0%, #3a8dff 100%);
+  border: none;
+  margin-right: 0.5rem;
+}
+
+.card-pokemon .btn-secondary {
+  background: #e8f8f4;
+  color: #14746f;
+  border: 1px solid #bfe9de;
+}
+
+.card-pokemon .btn-secondary:hover {
+  background: #d9f4ec;
+  color: #0f5b53;
+}
