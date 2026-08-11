@@ -1,16 +1,39 @@
-# React + Vite
+# ⚡ Pokédex Web App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Una aplicación web interactiva desarrollada con **React** y **Axios** que permite explorar la colección de Pokémon mediante el consumo de la **PokéAPI**, buscar personajes en tiempo real y gestionar tu lista de favoritos en un estado global.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Características
 
-## React Compiler
+* **Inicio (Landing):** Presentación del proyecto con interfaz visual estilizada.
+* **Catálogo de Personajes:** Muestreo dinámico de Pokémon cargados desde la API con soporte responsive.
+* **Buscador en Tiempo Real:** Filtrado de personajes por nombre dentro del catálogo cargado.
+* **Gestión de Favoritos:** Agrega tus Pokémon preferidos y consulta tu lista guardada mediante Context API.
+* **Paginación Dinámica:** Peticiones asíncronas con offset/limit directamente a la API para navegar entre páginas.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tecnologías Utilizadas
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* **React** (Vite / CRA)
+* **Axios** (Cliente HTTP para peticiones asíncronas)
+* **React Context API** (Manejo de estado global: `PokemonContext`)
+* **React Router** (Navegación SPA)
+* **React Bootstrap & CSS3** (Diseño y grilla responsive)
+* **PokéAPI** (Consumo de datos, tipos e imágenes de Pokémon)
+
+---
+
+## 💻 Instalación y Ejecución
+
+1. **Clona el repositorio:**
+   ```bash
+   git clone:  https://github.com/josstech-boop/Catalogo_Pokemons.git
+
+
+![Home](./public/image/image1.png)
+![Loading](./public/image/image2.png)
+![Catalago](./public/image/image3.png)
+![Favoritos](./public/image/image4.png)
+
