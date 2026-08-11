@@ -3,6 +3,7 @@ import { Home } from "../Pages/Home"
 import { Personajes } from "../Pages/Personajes"
 import { Favoritos } from "../Pages/Favoritos"
 import { PokemonProvider } from "../ContextPokemon"
+import { DetallePokemon } from "../Pages/DetallePokemon"
 
 function App() {
 
@@ -15,6 +16,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/favorites" element={<Favoritos />} />
             <Route path="/personajes" element={<Personajes />} />
+            <Route path="/detalle/:id" element={<DetallePokemon />} />
+            <Route path="/favorites" element={<Favoritos />} />
           </Routes>
 
         </PokemonProvider>
