@@ -1,4 +1,4 @@
-import { Badge, Col, Container, Form, Row } from 'react-bootstrap';
+import { Col, Container, Form, Row, Spinner } from 'react-bootstrap';
 import { CardPokemon } from '../../Components/CardPokemon';
 import { useContext, useEffect, useState } from 'react';
 import { PokemonContext } from '../../ContextPokemon';
@@ -7,82 +7,95 @@ import '../PageShared.css';
 
 const Personajes = () => {
 
-    const { pokemonsFilter, setPokemonsFilter, pokemons, paginados, setPaginados } = useContext(PokemonContext)
-    const [page, setPage] = useState(0)
-    // const [loading, setLoading] = useState(true)
+    const { pokemonsFilter, setPokemonsFilter, pokemons, paginados, setPaginados, page, setPage } = useContext(PokemonContext)
+    const [loading, setLoading] = useState(true)
 
+    useEffect(() => {
+        // setPokemonsFilter(paginados[page])
+        setPokemonsFilter(pokemons)
+
+        const timer = setTimeout(() => {
+            setLoading(false)
+        }, 600)
+
+        return () => clearTimeout(timer)
+    }, [pokemons, setPokemonsFilter])
 
     const buscardor = (e) => {
         const pokemonsEncontrados = pokemons.filter(pokemon => pokemon.name.toLowerCase().includes(e.target.value)).slice(0, 20)
 
         if (e.target.value == '') {
-            setPokemonsFilter(paginados[page])
+            // setPokemonsFilter(paginados[page])
+            setPokemonsFilter(pokemons)
         } else {
             setPokemonsFilter(pokemonsEncontrados)
         }
     }
 
     const irAdelante = () => {
-        setPage(prev => prev + 1)
-        setPokemonsFilter(paginados[page + 1])
+        if (page <= 66) {
+            setPage(prev => prev + 1)
+            // setPokemonsFilter(paginados[page + 1])
+            setPokemonsFilter(pokemons)
+        }
     }
 
     const irAtras = () => {
-        page > 0 && setPage(prev => prev - 1)
-        setPokemonsFilter(paginados[page - 1])
+        if (page > 0) {
+            setPage(prev => prev - 1)
+            // setPokemonsFilter(paginados[page - 1])
+            setPokemonsFilter(pokemons)
+        }
     }
 
-    // useEffect(() => {
-    //     console.log('cola')
-    //     setTimeout(() => {
-    //         setLoading(false)
-    //     }, 3000);
-
-    // }, [])
-
     return (
+        <Container fluid className="page-container">
+            {/* Navbar flotante idéntico a la imagen */}
+            <header className="pokedex-navbar">
+                <span className="pokedex-logo">POKÉDEX</span>
+                <nav className="pokedex-nav-links">
+                    <NavLink to={'/'} className="pokedex-link">Inicio</NavLink>
+                    <NavLink to={'/personajes'} className="pokedex-link">Catálogo</NavLink>
+                    <NavLink to={'/favorites'} className="pokedex-link">Favoritos</NavLink>
+                </nav>
+            </header>
 
-        <>
-
-            <Container fluid className="page-container">
-                <div className="page-header-box">
-                    <div>
-                        <span className="brand-badge">CATÁLOGO</span>
-                        <h2 className="page-header-title">Explora tu colección de Pokémon</h2>
-                        <p className="page-header-text">Usa el buscador y navega tus personajes favoritos con una vista fresca y cómoda.</p>
-                    </div>
-                    <div className="page-header-actions">
-                        <div className="home-actions">
-                            <NavLink to={'/'} className="home-btn">Inicio</NavLink>
-                            <NavLink to={'/personajes'} className="home-btn">Catálogo</NavLink>
-                            <NavLink to={'/favorites'} className="home-btn">Favoritos</NavLink>
-                        </div>
-                    </div>
+            {/* Banner principal morado/azul con badge amarillo */}
+            <div className="home-card-header">
+                <div>
+                    <span className="home-badge">CATÁLOGO</span>
+                    <h1 className="home-title">Explora tu colección de Pokémon</h1>
+                    <p className="home-subtitle">Usa el buscador y navega tus personajes favoritos con una vista fresca y cómoda.</p>
                 </div>
+            </div>
 
-                <div className="search-row">
-                    <Form.Control
-                        type="text"
-                        placeholder="Buscar Pokémon"
-                        className="rounded-pill border-0 shadow-sm"
-                        style={{ minWidth: '220px' }}
-                        onChange={buscardor}
-                    />
+            {/* Buscador y botones de paginación */}
+            <div className="search-pagination-wrapper">
+                <Form.Control
+                    type="text"
+                    placeholder="Buscar Pokémon..."
+                    className="search-input"
+                    onChange={buscardor}
+                />
 
-                    <div>
-                        <button onClick={irAtras}>Atras</button>
-                        <button onClick={irAdelante}>Siguiente</button>
-                    </div>
+                <div className="pagination-buttons">
+                    <button className="nav-btn" onClick={irAtras} disabled={page === 0}>
+                        Atrás
+                    </button>
+                    <button className="nav-btn" onClick={irAdelante}>
+                        Siguiente
+                    </button>
                 </div>
+            </div>
 
-                <Row xs={1} md={2} lg={3} xl={4} className="g-4 mt-4">
-
-                    {/*{loading &&
-                        <div className="detalle-pokemon-loading">
-                            <Spinner animation="border" role="status" />
-                            <span>Cargando Pokémon...</span>
-                        </div>} */}
-
+            {/* Carga con Spinner */}
+            {loading ? (
+                <div className="loading-container">
+                    <Spinner animation="border" role="status" className="custom-spinner" />
+                    <p className="loading-text">Cargando catálogo...</p>
+                </div>
+            ) : (
+                <Row xs={1} md={3} lg={4} xl={6} sm={2} className="g-4 mt-2">
                     {pokemonsFilter?.map((items, index) => (
                         <Col key={`${items.name}_${index}`} className="d-flex">
                             <div className="w-100 rounded-4 shadow-sm p-2 h-100" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(8px)' }}>
@@ -91,11 +104,9 @@ const Personajes = () => {
                         </Col>
                     ))}
                 </Row>
-            </Container>
-        </>
-
-
+            )}
+        </Container>
     )
 }
 
-export { Personajes } 
+export { Personajes }

@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router"
+
 import { PokemonContext } from "../../ContextPokemon"
 import { Container, Row, Col, Card, Badge, ListGroup, Spinner, Button, ProgressBar } from "react-bootstrap"
 import "./DetallePokemon.css"
+import { useNavigate, useParams } from "react-router"
 
 const DetallePokemon = () => {
     const { getDetailPokemon } = useContext(PokemonContext)
@@ -10,8 +11,6 @@ const DetallePokemon = () => {
     const [loading, setLoading] = useState(true)
     const { id } = useParams()
     const navigate = useNavigate()
-
-    
 
     useEffect(() => {
         if (!id) return
@@ -34,7 +33,7 @@ const DetallePokemon = () => {
     if (loading) {
         return (
             <div className="detalle-pokemon-loading">
-                <Spinner animation="border" role="status" />
+                <Spinner animation="border" variant="info" style={{ width: '3rem', height: '3rem' }} />
                 <span>Cargando Pokémon...</span>
             </div>
         )
@@ -53,82 +52,79 @@ const DetallePokemon = () => {
 
     return (
         <Container className="detalle-pokemon-page py-5">
-            <Button variant="light" className="mb-4 shadow-sm" onClick={() => navigate(-1)}>
+            <Button className="btn-back-custom mb-4 shadow-sm" onClick={() => navigate(-1)}>
                 ← Volver
             </Button>
 
-            <Card className="detalle-pokemon-card border-0 shadow-lg overflow-hidden">
-                <Row className="g-0 align-items-center">
+            <Card className="detalle-pokemon-card border-0">
+                <Row className="g-0">
+                    {/* Columna Hero / Visual */}
+                    <Col md={5} className="detalle-pokemon-hero">
+                        <span className="pokemon-number-badge">#{paddedId}</span>
 
-                    <Col md={5} className="detalle-pokemon-hero bg-gradient">
-                        <Card.Title className="detalle-pokemon-title">{capitalizedName}</Card.Title>
-
-                        <Card.Text className="detalle-pokemon-description text-secondary">
-                            Explora el perfil completo de {capitalizedName}, incluyendo sus habilidades, movimientos rápidos y estadísticas clave.
-                        </Card.Text>
+                        <div className="text-center my-3">
+                            <Card.Title className="detalle-pokemon-title">{capitalizedName}</Card.Title>
+                            <Card.Text className="detalle-pokemon-description mt-2">
+                                Profiling completo: habilidades, movimientos y estadísticas base.
+                            </Card.Text>
+                        </div>
 
                         <div className="detalle-pokemon-image-wrap">
                             <img src={sprite} alt={capitalizedName} className="detalle-pokemon-image" />
                         </div>
-                        <div className="detalle-pokemon-meta text-center text-white px-4 pb-4">
-                            <span className="pokemon-number">#{paddedId}</span>
-                            <div className="pokemon-types mt-3">
-                                {pokemon.types?.map((typeInfo) => {
-                                    const typeName = typeInfo?.type?.name || typeInfo
-                                    const keyValue = `${typeName}-${typeInfo?.slot ?? typeName}`
-                                    const typeClass = `type-${String(typeName).toLowerCase().replace(/\s+/g, "-")}`
-                                    return (
-                                        <Badge key={keyValue} className={`type-badge text-capitalize me-2 mb-2 ${typeClass}`}>
-                                            {typeName}
-                                        </Badge>
-                                    )
-                                })}
-                            </div>
-                        </div>
 
+                        <div className="pokemon-types mt-2 text-center">
+                            {pokemon.types?.map((typeInfo) => {
+                                const typeName = typeInfo?.type?.name || typeInfo
+                                const keyValue = `${typeName}-${typeInfo?.slot ?? typeName}`
+                                const typeClass = `type-${String(typeName).toLowerCase().replace(/\s+/g, "-")}`
+                                return (
+                                    <Badge key={keyValue} className={`type-badge text-capitalize me-2 mb-2 ${typeClass}`}>
+                                        {typeName}
+                                    </Badge>
+                                )
+                            })}
+                        </div>
                     </Col>
 
+                    {/* Columna Detalles y Stats */}
                     <Col md={7}>
-                        <Card.Body className="px-5 py-4">
-                            <div className="d-flex justify-content-between align-items-start mb-3">
-                                <div>
-
-                                    <Card.Subtitle className="text-muted text-capitalize">
-                                        {pokemon.species?.name || "Pokémon"}
-                                    </Card.Subtitle>
-                                </div>
-
+                        <Card.Body className="p-4 p-lg-5">
+                            <div className="d-flex justify-content-between align-items-center mb-4">
+                                <h5 className="text-muted text-capitalize mb-0">
+                                    Categoría: <strong className="text-dark">{pokemon.species?.name || "Pokémon"}</strong>
+                                </h5>
                             </div>
 
+                            {/* Dimensiones */}
+                            <div className="d-flex gap-3 mb-4">
+                                <div className="dimension-card">
+                                    <span>Altura</span>
+                                    <strong>{pokemon?.height ? `${pokemon?.height / 10} m` : "—"}</strong>
+                                </div>
+                                <div className="dimension-card">
+                                    <span>Peso</span>
+                                    <strong>{pokemon?.weight ? `${pokemon?.weight / 10} kg` : "—"}</strong>
+                                </div>
+                            </div>
 
-
-                            <Row className="mb-4">
-                                <Col md={6}>
-                                    <h6 className="detalle-pokemon-section-title">Habilidades</h6>
+                            <Row className="mb-4 g-4">
+                                <Col sm={6}>
+                                    <h6 className="detalle-pokemon-section-title mb-3">Habilidades</h6>
                                     <div className="ability-list">
                                         {pokemon.abilities?.map((item) => (
-                                            <Badge key={item.ability.name} bg="secondary" className="me-2 mb-2 text-capitalize">
+                                            <Badge key={item.ability.name} className="badge-ability me-2 mb-2 text-capitalize">
                                                 {item.ability.name}
                                             </Badge>
                                         ))}
                                     </div>
-
                                 </Col>
-                                <div className="pokemon-dimensions mt-3 mb-3 d-flex justify-content-center gap-2 flex-wrap">
-                                    <div  >
-                                        <span className="titulo-pa">Altura: </span>
-                                        <strong>{pokemon?.height ? `${pokemon?.height / 10} m` : "—"}</strong>
-                                    </div>
-                                    <div >
-                                        <span className="titulo-pa">Peso: </span>
-                                        <strong>{pokemon?.weight ? `${pokemon?.weight / 10} kg` : "—"}</strong>
-                                    </div>
-                                </div>
-                                <Col md={6}>
-                                    <h6 className="detalle-pokemon-section-title">Movimientos rápidos</h6>
+
+                                <Col sm={6}>
+                                    <h6 className="detalle-pokemon-section-title mb-3">Movimientos Rápidos</h6>
                                     <ListGroup variant="flush" className="stat-list">
                                         {pokemon.moves?.slice(0, 4).map((move) => (
-                                            <ListGroup.Item key={move.move.name} className="px-0 py-2 border-0">
+                                            <ListGroup.Item key={move.move.name} className="move-item px-3 py-2 border-0 text-capitalize">
                                                 {move.move.name}
                                             </ListGroup.Item>
                                         ))}
@@ -136,15 +132,19 @@ const DetallePokemon = () => {
                                 </Col>
                             </Row>
 
-                            <div className="detalle-pokemon-stats">
-                                <h6 className="detalle-pokemon-section-title mb-3">Estadísticas</h6>
+                            {/* Estadísticas */}
+                            <div className="detalle-pokemon-stats pt-2">
+                                <h6 className="detalle-pokemon-section-title mb-3">Estadísticas Base</h6>
                                 {pokemon.stats?.map((stat) => (
                                     <div key={stat.stat.name} className="stat-row mb-3">
-                                        <div className="d-flex justify-content-between mb-1 stat-label">
-                                            <span className="text-capitalize">{stat.stat.name}</span>
-                                            <span>{stat.base_stat}</span>
+                                        <div className="d-flex justify-content-between mb-1">
+                                            <span className="stat-label-text text-capitalize">{stat.stat.name}</span>
+                                            <span className="stat-value">{stat.base_stat}</span>
                                         </div>
-                                        <ProgressBar now={Math.min(stat.base_stat, 100)} label={`${stat.base_stat}`} />
+                                        <ProgressBar
+                                            now={Math.min(stat.base_stat, 100)}
+                                            className="custom-progress"
+                                        />
                                     </div>
                                 ))}
                             </div>
@@ -156,4 +156,4 @@ const DetallePokemon = () => {
     )
 }
 
-export { DetallePokemon } 
+export { DetallePokemon }

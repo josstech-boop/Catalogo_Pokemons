@@ -4,6 +4,7 @@ import './CardPokemon.css';
 import { Link, NavLink } from 'react-router';
 import { useContext, useState } from 'react';
 import { PokemonContext } from '../../ContextPokemon';
+import './CardPokemon.css'
 
 const CardPokemon = ({ name, image, types, id, isFavorite }) => {
 

@@ -9,15 +9,17 @@ const PokemonProvider = ({ children }) => {
     const [favoritos, setFavoritos] = useState([])
     const [pokemonsFilter, setPokemonsFilter] = useState([])
     const [pokemons, setPokemons] = useState([])
-
     const [paginados, setPaginados] = useState([])
+    const [page, setPage] = useState(0)
+
 
 
     useEffect(() => {
         const getPoke = async () => {
 
             try {
-                const { data } = await ApiClient.get('/pokemon?limit=1025')
+                // const { data } = await ApiClient.get('/pokemon?limit=1025')
+                const { data } = await ApiClient.get(`/pokemon?limit=20&offset=${page * 20}`)
 
                 const pokemons = await Promise.all(data.results.map(async (item) => {
                     const pokemon = await ApiClient.get(item.url)
@@ -26,13 +28,15 @@ const PokemonProvider = ({ children }) => {
                         name: pokemon.data.name,
                         types: pokemon.data.types.map(item => item.type.name),
                         image: pokemon.data.sprites.other.home.front_default,
-                        isFavorite: false
+                        isFavorite: favoritos.some(item => item.id === pokemon.data.id)
                     }
                 }))
 
-                paginate(pokemons)
+                // paginate(pokemons)
                 setPokemons(pokemons)
-                // setPokemonsFilter(pokemons)
+                setPokemonsFilter(pokemons)
+
+
             } catch (error) {
                 console.log(error)
             }
@@ -40,21 +44,22 @@ const PokemonProvider = ({ children }) => {
 
         }
 
-        const paginate = (pokemons) => {
-            const limit = 20
-            let paginado = []
+        // const paginate = (pokemons) => {
+        //     const limit = 20
+        //     let paginado = []
 
 
-            for (let i = 0; i < pokemons.length; i += parseInt(limit)) {
-                paginado.push(pokemons.slice(i, i + parseInt(limit)))
-            }
+        //     for (let i = 0; i < pokemons.length; i += parseInt(limit)) {
+        //         paginado.push(pokemons.slice(i, i + parseInt(limit)))
+        //     }
 
-            setPaginados(paginado)
-            setPokemonsFilter(paginado[0])
-        }
+        //     setPaginados(paginado)
+        //     setPokemonsFilter(paginado[0])
+        // }
+
         getPoke()
 
-    }, [])
+    }, [page])
 
     const getDetailPokemon = async (id) => {
 
@@ -66,12 +71,13 @@ const PokemonProvider = ({ children }) => {
 
     const addFavorites = (id) => {
         const pokemon = pokemons.find(pokemon => pokemon.id == id)
-        setPokemons((pokemons) => pokemons.map((pokemon) => (pokemon.id === Number(id) ? { ...pokemon, isFavorite: true } : pokemon)))
-
-        setPokemonsFilter((pokemons) => pokemons.map((pokemon) => (pokemon.id === Number(id) ? { ...pokemon, isFavorite: true } : pokemon)))
-
 
         if (favoritos.every(item => item.id != pokemon.id)) {
+
+            setPokemons((pokemons) => pokemons.map((pokemon) => (pokemon.id === Number(id) ? { ...pokemon, isFavorite: true } : pokemon)))
+
+            setPokemonsFilter((pokemons) => pokemons.map((pokemon) => (pokemon.id === Number(id) ? { ...pokemon, isFavorite: true } : pokemon)))
+
             setFavoritos([...favoritos, {
                 name: pokemon.name,
                 image: pokemon.image,
@@ -94,7 +100,10 @@ const PokemonProvider = ({ children }) => {
             setPokemonsFilter,
             pokemons,
             paginados,
-            setPaginados
+            setPaginados,
+            setPage,
+            page
+
 
         }}>
             {children}
