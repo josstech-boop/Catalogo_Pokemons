@@ -10,14 +10,13 @@ function App() {
   return (
     <>
 
-      <BrowserRouter>
+      <BrowserRouter basename="/Catalogo_Pokemons">
         <PokemonProvider>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/favorites" element={<Favoritos />} />
             <Route path="/personajes" element={<Personajes />} />
             <Route path="/detalle/:id" element={<DetallePokemon />} />
-            <Route path="/favorites" element={<Favoritos />} />
           </Routes>
 
         </PokemonProvider>
